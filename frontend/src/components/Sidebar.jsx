@@ -1,5 +1,5 @@
 import { Home, Users, Ban, Bell, Flame, User2Icon, User, Users2, Palette, BellIcon } from 'lucide-react';
-import useAuthUser from '../hooks/useAuthUser';
+import useAuthUser from '../hooks/useAuthUser.js';
 import React from 'react';
 
 const Sidebar = () => {

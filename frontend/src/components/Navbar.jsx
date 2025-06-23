@@ -1,9 +1,5 @@
-import React from 'react';
 import { Home, Bell, UserPlus, LogOut, MessageCircle } from 'lucide-react';
 import useAuthUser from '../hooks/useAuthUser.js';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
-import { logout } from '../lib/api.js';
 import useLogout from '../hooks/useLogout.js';
 
 const Navbar = () => {

@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { Globe, Eye, EyeOff } from 'lucide-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'react-hot-toast';
-import { login } from '../lib/api.js';
 import useLogin from '../hooks/useLogin.js';
 
 const LoginPage = () => {

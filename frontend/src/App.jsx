@@ -7,9 +7,7 @@ import ChatPage from "./pages/ChatPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 
 import { Navigate, Route, Routes } from "react-router";
-import toast, { Toaster } from "react-hot-toast";
-import {useQuery} from "@tanstack/react-query";
-import axiosInstance from "./lib/axios.js";
+import { Toaster } from "react-hot-toast";
 import PageLoader from "./components/PageLoader.jsx";
 import useAuthUser from "./hooks/useAuthUser.js";
 import Layout from "./components/Layout.jsx";

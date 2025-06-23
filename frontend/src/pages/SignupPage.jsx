@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import { Globe, Eye, EyeOff } from 'lucide-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-
-import { signup } from '../lib/api.js';
 import useSignup from '../hooks/useSignup.js';
 
 const SignupPage = () => {

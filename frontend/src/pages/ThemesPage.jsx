@@ -1,4 +1,3 @@
-import React from 'react'
 import {THEMES } from '../data/themes.js'
 import themeStore from '../lib/themeStore'
 const ThemesPage = () => {

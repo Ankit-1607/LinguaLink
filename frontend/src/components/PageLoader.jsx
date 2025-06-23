@@ -1,5 +1,5 @@
 import { Loader2 } from 'lucide-react';
-import themeStore from '../lib/themeStore';
+import themeStore from '../lib/themeStore.js';
 
 const PageLoader = () => {
   const {theme} = themeStore();

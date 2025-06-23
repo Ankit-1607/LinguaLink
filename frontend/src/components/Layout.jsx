@@ -1,5 +1,4 @@
-import { Children } from "react"
-import Navbar from "./NavBar.jsx"
+import Navbar from "./Navbar.jsx"
 import Sidebar from "./Sidebar.jsx"
 const Layout = ({ children, showSidebar = false }) => {
   return (

@@ -1,5 +1,4 @@
 import { CallControls, CallingState, SpeakerLayout, StreamTheme, useCallStateHooks } from '@stream-io/video-react-sdk';
-import React from 'react'
 import { useNavigate } from 'react-router';
 
 const VideoCallContent = ({chatID}) => {

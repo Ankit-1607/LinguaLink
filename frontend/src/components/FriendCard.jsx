@@ -1,5 +1,5 @@
 import { Mail } from "lucide-react";
-import getLanguageName from "../utils/getLanguageName";
+import getLanguageName from "../utils/getLanguageName.js";
 import { Link } from "react-router";
 
 const FriendCard = ({ friend }) => (
