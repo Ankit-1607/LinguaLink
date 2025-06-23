@@ -40,13 +40,13 @@ export const signup = async (req, res) => {
       });
     }
 
-    // create user
-    const encodedFullName = encodeURIComponent(fullName);
-    const avatar = `https://avatar.iran.liara.run/username?username=${encodedFullName}`; // generate avatar based on their name
+    const seed = Math.floor(Math.random() * 100000);
+    const avatarUrl = `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`;
+
     const newUser = await User.create({fullName,
       email,
       password,
-      profilePic: avatar,
+      profilePic: avatarUrl,
       nativeLanguage
     })
 
@@ -158,7 +158,7 @@ export const bio = async (req, res) => {
   try {
     const userID = req.user._id;
     // Add profile pic here?
-    const {fullName, bio, nativeLanguage, learningLanguages, timeZone, availability, location} = req.body;
+    const {fullName, bio, nativeLanguage, learningLanguages, timeZone, availability, location, profilePic} = req.body;
 
     if(!fullName || !bio || !nativeLanguage || (!Array.isArray(learningLanguages) || learningLanguages.length === 0) || !timeZone || (!Array.isArray(availability) || availability.length === 0) || !location) {
       return res.status(400).json({
@@ -177,6 +177,7 @@ export const bio = async (req, res) => {
 
     const updatedUser = await User.findByIdAndUpdate(userID, {
       ...req.body,
+      profilePic: profilePic || req.user.profilePic, // use existing profile pic if not provided
       hasCompletedProfile: true
     }, {new: true});
 

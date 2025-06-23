@@ -12,12 +12,12 @@ export const getRecommendedUsers = async (req, res) => {
         { _id: { $nin: thisUser.friends } }, // exclude friends
         { _id: { $nin: thisUser.blockedUsers } }, // exclude blocked
         { hasCompletedProfile: true }, // only complete profiles
-        {
-          $or: [
-            { nativeLanguage: { $in: learningLanguageCodes } },
-            { 'learningLanguages.code': nativeLanguage }
-          ]
-        }
+        // {
+        //   $or: [
+        //     { nativeLanguage: { $in: learningLanguageCodes } },
+        //     { 'learningLanguages.code': nativeLanguage }
+        //   ]
+        // }
       ]
     });
 
@@ -141,11 +141,11 @@ export const acceptFriendRequest = async (req, res) => {
 
     // add each other as friends 
     await User.findByIdAndUpdate(request.sender, {
-      $addToSet: {friends: FriendRequest.recipient},
+      $addToSet: {friends: request.recipient},
     });
 
     await User.findByIdAndUpdate(request.recipient, {
-      $addToSet: {friends: FriendRequest.sender},
+      $addToSet: {friends: request.sender},
     });
 
     res.status(200).json({
@@ -161,6 +161,82 @@ export const acceptFriendRequest = async (req, res) => {
   }
 }
 
+export const rejectFriendRequest = async (req, res) => {
+  try {
+    const thisUserID = req.user.id;
+    const requestID = req.params.id;
+
+    const request = await FriendRequest.findById(requestID);
+    if (!request) {
+      return res.status(404).json({
+        success: false,
+        message: "Friend request not found"
+      });
+    }
+
+    // Only recipient can reject
+    if (request.recipient.toString() !== thisUserID) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to reject this request"
+      });
+    }
+
+    // Update status to rejected
+    request.status = "rejected";
+    await request.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Friend request rejected successfully"
+    });
+  } catch (error) {
+    console.error("Error in rejectFriendRequest controller:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+}
+
+export const cancelFriendRequest = async (req, res) => {
+  try {
+    const thisUserID = req.user.id;
+    const requestID = req.params.id;
+
+    // Find the request
+    const request = await FriendRequest.findById(requestID);
+    if (!request) {
+      return res.status(404).json({
+        success: false,
+        message: "Friend request not found"
+      });
+    }
+
+    // Only sender can cancel
+    if (request.sender.toString() !== thisUserID) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to cancel this request"
+      });
+    }
+
+    // Delete the request from the database
+    await FriendRequest.findByIdAndDelete(requestID);
+
+    res.status(200).json({
+      success: true,
+      message: "Friend request cancelled and deleted successfully"
+    });
+  } catch (error) {
+    console.error("Error in cancelFriendRequest controller:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
+}
+
 export const getFriendRequests = async (req, res) => {
   try {
     const incomingRequests = await FriendRequest.find({
@@ -168,15 +244,15 @@ export const getFriendRequests = async (req, res) => {
       status: "pending"
     }).populate("sender", "fullName profilePic nativeLanguage learningLanguages");
 
-    const acceptedRequests = await FriendRequest.find({
+    const sentRequests = await FriendRequest.find({
       sender: req.user.id,
-      status: "accepted",
+      // status: "accepted",
     }).populate("recipient", "fullName profilePic");
 
     res.status(200).json({
       success: true,
       incomingRequests,
-      acceptedRequests
+      sentRequests
     });
   } catch(error) {
     console.error("Error in getFriendRequests controller:", error);
